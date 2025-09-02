@@ -1,27 +1,33 @@
-# ChatwebsocketV2Frontend
+# 🟢 Chat simple en Tiempo Real con WebSockets
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.4.
+Este proyecto es un **chat grupal en tiempo real** construido con **Angular 18** en el frontend y **Spring Boot** en el backend.  
+Permite simular varios usuarios conectados simultáneamente, utilizando **WebSockets** para establecer una **conexión bidireccional** entre cliente y servidor, logrando comunicación instantánea.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## ⚙️ Tecnologías utilizadas
 
-## Code scaffolding
+- **Backend:** Spring Boot, WebSockets
+- **Frontend:** Angular 18, Bootstrap
+- **Comunicación en tiempo real:** SockJS, STOMP.js
+- **Estilos y UI:** Bootstrap
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
 
-## Build
+## 💻 Funcionalidades
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Conexión simultánea de múltiples usuarios.
+- Envío y recepción de mensajes en tiempo real.
+- Mensajes almacenados temporalmente en memoria para simulaciones rápidas.
 
-## Running unit tests
+---
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 🖼 Capturas de pantalla
 
-## Running end-to-end tests
+**Vista principal del chat:**
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+![Chat principal](./public/assets/img//img1.png)
 
-## Further help
+![Mensajes en tiempo real](./public/assets/img/img2.png)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
