@@ -4,6 +4,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { WebsocketService } from './services/websocket.service';
 import { CommonModule } from '@angular/common';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -22,15 +23,16 @@ export class AppComponent implements OnInit {
   connectingMessage = 'Connecting ...';
 
   wsService = inject(WebsocketService);
+  userService = inject(UserService);
 
 
   ngOnInit(): void {
     console.log('App component ngOnInit called.');
 
-    this.wsService.messages$.subscribe(message => {
-      if (message) {
-        console.log(`Message received from ${message.sender} : ${message.content}`);
-        this.messages.push(message);
+    this.wsService.messages$.subscribe(messages => {
+      if (messages) {
+        console.log(`Message received from ${messages.sender} : ${messages.content} : ${messages.timestamp}`);
+        this.messages.push(messages);
       }
     });
     this.wsService.connectionStatus$.subscribe(connected => {
@@ -47,7 +49,18 @@ export class AppComponent implements OnInit {
 
   connect() {
     console.log('conexion a: localhost/8080/ws');
-    this.wsService.connect(this.username);
+    this.userService.register(this.username).subscribe({
+      next: (user) => {
+        console.log('Usuario creado:', user);
+        this.wsService.connect(user.username);
+      },
+      error: (err) => {
+        console.error('Error al registrar:', err);
+      },
+      complete: () => {
+        console.log('Registro finalizado');
+      }
+    });
   }
 
   sendMessage() {
