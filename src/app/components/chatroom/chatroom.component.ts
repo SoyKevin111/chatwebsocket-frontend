@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { WebsocketService } from '../../services/websocket.service';
-import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-chatroom',
@@ -14,22 +13,21 @@ import { UserService } from '../../services/user.service';
 })
 export class ChatroomComponent implements OnInit {
 
-  username: string = '';
-  message: string = '';
+  username = '';
+  message = '';
   messages: any[] = [];
-  isConnected: boolean = false;
-  connectingMessage: string = 'Connecting ...';
+  isConnected = false;
+  connectingMessage = 'Connecting ...';
 
   private wsService = inject(WebsocketService);
-  private userService = inject(UserService);
 
   ngOnInit(): void {
     console.log('ChatroomComponent ngOnInit called.');
+    const storedUsername = localStorage.getItem('username');
 
-    const usernameFromStorage = localStorage.getItem('username');
-
-    if (usernameFromStorage) {
-      this.initializeWebSocket(usernameFromStorage);
+    if (storedUsername) {
+      this.username = storedUsername;
+      this.initializeWebSocket(storedUsername);
     } else {
       console.log('Usuario no cargado.');
     }
@@ -37,19 +35,24 @@ export class ChatroomComponent implements OnInit {
 
   private initializeWebSocket(username: string): void {
     this.wsService.connect(username);
+    this.subscribeToMessages();
+    this.subscribeToConnectionStatus();
+  }
 
+  private subscribeToMessages(): void {
     this.wsService.messages$.subscribe(message => {
-      if (message) {
-        console.log(
-          `Message received from ${message.sender} : ${message.content} : ${message.timestamp}`
-        );
-        this.messages.push(message);
-      }
-    });
+      if (!message) return;
+      if (message.type === 'CHAT' && !message.content?.trim()) return; // ignorar chats vacíos
 
+      console.log(`Message received from ${message.sender} : ${message.content} : ${message.timestamp}`);
+      this.messages.push(message);
+    });
+  }
+
+
+  private subscribeToConnectionStatus(): void {
     this.wsService.connectionStatus$.subscribe(connected => {
       this.isConnected = connected;
-
       if (connected) {
         this.connectingMessage = '';
         console.log('WS conexión establecida.');
@@ -65,16 +68,11 @@ export class ChatroomComponent implements OnInit {
   }
 
   getAvatarColor(sender: string): string {
-    const colors = [
-      '#2196F3', '#32c787', '#00BCD4', '#ff5652',
-      '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
-    ];
-
+    const colors = ['#2196F3', '#32c787', '#00BCD4', '#ff5652', '#ffc107', '#ff85af', '#FF9800', '#39bbb0'];
     let hash = 0;
     for (let i = 0; i < sender.length; i++) {
       hash = 31 * hash + sender.charCodeAt(i);
     }
-
     return colors[Math.abs(hash % colors.length)];
   }
 }

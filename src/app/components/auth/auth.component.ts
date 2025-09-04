@@ -14,7 +14,7 @@ import { WebsocketService } from '../../services/websocket.service';
 })
 export class AuthComponent implements OnInit {
 
-  username: string = '';
+  username = '';
 
   private wsService = inject(WebsocketService);
   private userService = inject(UserService);
@@ -25,38 +25,26 @@ export class AuthComponent implements OnInit {
     localStorage.removeItem('conexion');
   }
 
-  constructor() {
-    this.listenToConnection();
-  }
-
-
-  private listenToConnection(): void {
-    this.wsService.connectionStatus$.subscribe(connected => {
-      if (connected) {
-        this.router.navigate(['/chatroom'], { state: { username: this.username } });
-      }
-    });
-  }
-
   register(): void {
     if (!this.username.trim()) {
       console.warn('El nombre de usuario no puede estar vacío.');
       return;
     }
 
-    console.log('Intentando registrar usuario...');
-
     this.userService.register(this.username).subscribe({
       next: () => {
-        console.log('Usuario creado');
-        this.wsService.connect(this.username);
-        localStorage.setItem('conexion', 'true');
+        console.log('Usuario registrado correctamente');
         localStorage.setItem('username', this.username);
+        localStorage.setItem('conexion', 'true');
+        localStorage.setItem('isNewUser', 'true');
+        this.router.navigate(['/chatroom']);
       },
       error: err => console.error('Error al registrar:', err),
       complete: () => console.log('Registro finalizado')
     });
   }
+
+
 
   login(): void {
     if (!this.username.trim()) {
@@ -64,14 +52,13 @@ export class AuthComponent implements OnInit {
       return;
     }
 
-    console.log('Intentando logear usuario...');
-
     this.userService.login(this.username).subscribe({
       next: () => {
-        console.log('Usuario logeado');
-        this.wsService.connect(this.username);
-        localStorage.setItem('conexion', 'true');
+        console.log('Usuario logeado correctamente');
         localStorage.setItem('username', this.username);
+        localStorage.setItem('conexion', 'true');
+        localStorage.setItem('isNewUser', 'false');
+        this.router.navigate(['/chatroom']);
       },
       error: err => console.error('Error al logear:', err),
       complete: () => console.log('Login finalizado')

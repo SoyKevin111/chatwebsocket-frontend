@@ -44,7 +44,10 @@ export class WebsocketService {
       // Notificar al servidor que un usuario se ha conectado
       this.stompClient?.publish({
         destination: '/app/chat.addUser',
-        body: JSON.stringify({ sender: username, type: 'JOIN' })
+        body: JSON.stringify({
+          sender: username,
+          type: localStorage.getItem('isNewUser') === 'true' ? 'JOIN' : 'CHAT'
+        })
       });
     };
 
@@ -57,6 +60,7 @@ export class WebsocketService {
     // Activar conexión
     this.stompClient.activate();
   }
+
 
   sendMessage(username: string, content: string) {
     if (this.stompClient && this.stompClient.connected) {
