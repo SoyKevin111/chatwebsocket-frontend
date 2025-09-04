@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Client, Message } from '@stomp/stompjs';
 import { BehaviorSubject } from 'rxjs';
 import SockJS from 'sockjs-client';
@@ -16,6 +17,8 @@ export class WebsocketService {
   private connectionSubject = new BehaviorSubject<boolean>(false);
   public connectionStatus$ = this.connectionSubject.asObservable();
 
+  private router = inject(Router);
+
   connect(username: string) {
     const socket = new SockJS('http://localhost:8080/ws');
 
@@ -27,6 +30,7 @@ export class WebsocketService {
 
     // Manejo de conexión exitosa
     this.stompClient.onConnect = (frame) => {
+
       console.log('Conectado al servidor WebSocket');
 
       // Actualiza estado de conexión

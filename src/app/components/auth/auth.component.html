@@ -1,1 +1,32 @@
-<p>auth works!</p>
+<!-- Chat Login -->
+<div class="d-flex justify-content-center align-items-center vh-100 bg-dark text-light">
+
+	<div class="card p-4 shadow-lg border-0 rounded-4" style="max-width: 420px; width: 100%;">
+		<h3 class="text-center mb-4 fw-bold text-primary">💬 Join the Chat Room</h3>
+
+		<form>
+			<!-- Username Input -->
+			<div class="mb-3">
+				<label for="username" class="form-label fw-semibold">Username</label>
+				<input [(ngModel)]="username" type="text" name="username" id="username"
+					class="form-control form-control-lg rounded-3" placeholder="Enter your username" required>
+			</div>
+
+			<!-- Buttons -->
+			<div class="d-grid gap-3 mt-4">
+				<button (click)="register()" type="submit" class="btn btn-success btn-lg rounded-3">
+					<i class="fa-solid fa-user-plus me-2"></i> Register
+				</button>
+
+				<button (click)="login()" type="submit" class="btn btn-primary btn-lg rounded-3">
+					<i class="fa-solid fa-right-to-bracket me-2"></i> Login
+				</button>
+			</div>
+		</form>
+
+		<!-- Divider -->
+		<div class="text-center text-muted mt-4 small">
+			<span>Already have an account? Just login 🚀</span>
+		</div>
+	</div>
+</div>
