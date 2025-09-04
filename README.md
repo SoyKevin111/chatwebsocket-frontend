@@ -30,4 +30,11 @@ Permite simular varios usuarios conectados simultáneamente, utilizando **WebSoc
 
 ![Mensajes en tiempo real](./public/assets/img/img2.png)
 
+### Actualización
+
+![Mensajes en tiempo real](./public/assets/img/img3.png)
+Nota: se creo el backend y frontend para la carga del historial de mensajes en el chat del grupo, un simple inicio de sesión y registro.
+
+![Mensajes en tiempo real](./public/assets/img/img4.png)
+
 ---
